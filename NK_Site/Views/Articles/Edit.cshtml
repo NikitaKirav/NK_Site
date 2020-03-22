@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "_AdminBoardLayout";
+}
+@using Microsoft.AspNetCore.Identity
+
+<h2>Edit Article</h2>
+<form id="editForm" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="Number" id="Number" value="@Model.Number" />
+
+    <div class="sheet__content mt-8">
+        <div class="sheet__sidebar">
+            <aside class="sidebar">
+                <div class="sidebar__track">
+                    <div class="sidebar__wrapper">
+                        <div class="form-group">
+                            <label>
+                                DateCreate
+                            </label>
+                            <input type="datetime" name="DateCreate" class="form-control" value="@Model.DateCreate.ToString("dd.MM.yyyy, HH:mm:ss")" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                DateChange
+                            </label>
+                            <input type="datetime" name="DateChange" id="DateChange" class="form-control" value="@Model.DateChange.ToString("dd.MM.yyyy, HH:mm:ss")" readonly />
+                        </div>
+
+                        <div class="form-check">
+                            @Html.CheckBox("IsFavorite", @Model.IsFavorite, new { })
+                            <label class="form-check-label" for="defaultCheck1">
+                                IsFavorite
+                            </label>
+                        </div>
+
+                        <div class="form-check">
+                            @Html.CheckBox("Visible", @Model.Visible, new { })
+                            <label class="form-check-label" for="defaultCheck1">
+                                Visible
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                ImagePath
+                            </label>
+                            <input name="ImagePath" class="form-control" value="@Model.ImagePath" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                ImageText
+                            </label>
+                            <input name="ImageText" class="form-control" value="@Model.ImageText" />
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="DifficultyLevel" id="DifficultyLevel" value="@Model.DifficultyLevel" />
+                            <label>
+                                Level difficulty
+                            </label>
+                            <div class="blockLevel">
+                                @for (var i = 1; i <= 5; i++)
+                                {
+                                    <div class="levels" id="@("level" + i)"></div>
+                                }
+                            </div>
+                        </div>
+
+                        <label>
+                            Access
+                        </label>
+                        <div class="form-group">
+                            @foreach (IdentityRole role in ViewBag.ListOfRoles.AllRoles)
+                            {
+                                <input type="checkbox" name="Roles" value="@role.Name"
+                                       @(ViewBag.ListOfRoles.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />@role.Name <br />
+                                }
+                        </div>
+
+                    </div>
+                </div>
+            </aside>
+        </div>
+        <main class="feed sheet__main sheet-content-width">
+            <div class="mt-5 mb-4">
+                <div class="form-group">
+                    <label>
+                        Name
+                    </label>
+                    <input name="Name" class="form-control" value="@Model.Name" />
+                </div>
+
+                @*<form>
+                        <div class="form-group">
+                            <label for="exampleFormControlFile1">Example file input</label>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                        </div>
+                    </form>*@
+
+                <div class="form-group">
+                    <label>
+                        ShortDescription
+                    </label>
+                    <input name="ShortDescription" class="form-control" value="@Model.ShortDescription" />
+                </div>
+
+                <div class="form-group">
+                    <textarea name="Text" id="Text" class="form-control">@Model.Text</textarea>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label>
+                        Category
+                    </label>
+                    @Html.DropDownList("CategoryId", new SelectList(ViewBag.ListOfCategory, "Id", "Name"), new { })
+                    @*<select asp-for="Id" asp-items="@(new SelectList(ViewBag.ListOfCategory, "Id", "Name"))"></select>*@
+                </div>
+
+
+                <button id="saveButton" class="btn btn-primary" type="button">
+                    Save
+                </button>
+                <button id="saveAndExitButton" class="btn btn-primary" type="button">
+                    Save and Exit
+                </button>
+            </div>
+        </main>
+    </div>
+</form>
+
+<script src="~/js/DifficultyLevel.js"></script>
+<script>
+    CKEDITOR.replace('Text', {
+        on: {
+            save: function (evt) {
+                // Do something here, for example:
+                //console.log(evt.editor.getData());
+                var textNew = CKEDITOR.instances.Text.getData();
+                $('#Text').val(textNew);
+                $.ajax({
+                    url: "/Articles/Edit/@Model.Id",
+                    method: "post",
+                    contentType: "application/x-www-form-urlencoded",
+                    data: $("#editForm").serialize()
+                }).done(function () {
+                });
+                return false;
+            }
+        }
+    });
+
+    $("#saveButton").click(function () {
+        var textNew = CKEDITOR.instances.Text.getData();
+        $('#Text').val(textNew);
+        $.ajax({
+            url: "/Articles/Edit/@Model.Id",
+            method: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: $("#editForm").serialize(),
+            success: function (response) {
+                //debugger;
+                document.getElementById('DateChange').value = new Date(response.dateChange).toLocaleString();
+            }
+        });
+    });
+
+    $("#saveAndExitButton").click(function () {
+        var textNew = CKEDITOR.instances.Text.getData();
+        $('#Text').val(textNew);
+        $.ajax({
+            url: "/Articles/Edit/@Model.Id",
+            method: "post",
+            contentType: "application/x-www-form-urlencoded",
+            data: $("#editForm").serialize()
+        }).done(function () {
+            location.href = "/Articles/List";
+        });
+    });
+
+    $('#sendMail').on('change', function () {
+        $('#sendMail').val($('#sendMail').attr('data-val'));
+    });
+
+</script>

@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "_AdminBoardLayout";
+}
+@model IEnumerable<NK_Site.Models.ApplicationUser>
+
+<h2>List's Users</h2>
+<table class="table">
+    @foreach (var user in Model)
+    {
+    <tr>
+        <td>@user.UserName</td>
+        <td>@user.Email</td>
+        <td>
+            <a class="btn btn-sm btn-primary btn-admin" asp-action="Edit" asp-route-userid="@user.Id">Access right</a>
+        </td>
+    </tr>
+    }
+</table>

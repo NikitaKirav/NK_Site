@@ -1,0 +1,74 @@
+﻿@using System.Globalization;
+@model ReflectionIT.Mvc.Paging.PagingList<Article>
+    @using ReflectionIT.Mvc.Paging
+    @addTagHelper *, ReflectionIT.Mvc.Paging
+
+    <div class="search-form">
+        <form method="get" action="/Articles/Index">
+            <div>
+                <label for="s">
+                    <span class="screen-reader-text">
+                        Search
+                    </span>
+                    <svg class="search-icon" width="32" height="32">
+                        <use xlink:href="#mag">
+                            <svg id="mag" viewBox="0 0 56.7 56.7"><path d="M42.8 7.3C33-2.4 17.1-2.4 7.3 7.3c-9.8 9.8-9.8 25.7 0 35.5 8.7 8.7 22.2 9.7 32 2.9l9.6 9.6c1.8 1.8 4.7 1.8 6.4 0 1.8-1.8 1.8-4.7 0-6.4l-9.6-9.6c6.8-9.8 5.8-23.3-2.9-32zm-6.2 29.3c-6.4 6.4-16.7 6.4-23.1 0s-6.4-16.7 0-23.1c6.4-6.4 16.7-6.4 23.1 0 6.4 6.4 6.4 16.8 0 23.1z"></path></svg>
+                        </use>
+                    </svg>
+                </label>
+                <span class="algolia-autocomplete" style="position: relative; display: inline-block; direction: ltr;"><input value="" type="search" name="s" id="q" class="search-input ds-input" placeholder="Search Docs and Blog..." autocomplete="off" spellcheck="false" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-label="search input" aria-owns="algolia-autocomplete-listbox-0" dir="auto" style="position: relative; vertical-align: top;"><pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: pre; font-family: Lato, &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Tahoma, sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: normal; text-indent: 0px; text-rendering: auto; text-transform: none;"></pre><span class="ds-dropdown-menu" role="listbox" id="algolia-autocomplete-listbox-0" style="position: absolute; top: 100%; z-index: 100; display: none; left: 0px; right: auto;"><div class="ds-dataset-1"></div></span></span>
+            </div>
+        </form>
+    </div>
+
+    <header class="mega-header blog-main-header" id="aboutBlog">
+        <h1 class="headlines">NikitaKirav's Blog</h1>
+        <p class="headlines_text">This is where I post announcements, tips and tricks, new and updated features, fun roundups, new podcast episodes, and more. There's an <a href="/feed/">RSS feed</a>.</p>
+    </header>
+
+
+    <div class="page-wrap">
+        @{
+            int i = 1;
+            foreach (var article in Model)
+            {
+                <section class="home-article">
+                    <article>
+                        <table class="table-article">
+                            <tr>
+                                <td class="title-article">
+                                    <h1>
+                                        <a href="/Articles/Details/@article.Id">
+                                            #@article.Id: @article.Name
+                                        </a>
+                                    </h1>
+                                </td>
+                                <td class="difficulty">
+                                    <div>
+                                        <div class="@("level-difficulty"+@article.DifficultyLevel)"></div>
+                                        <span>difficulty</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <time class="block-time">@article.DateCreate.ToString("MMMM dd, yyyy", CultureInfo.GetCultureInfo("en-us"))</time>
+                        <div class="article-text">
+                            @Html.Raw(@article.ShortDescription)
+                        </div>
+                    </article>
+                </section>
+                @if (Model.Count > i)
+                {
+                    <div class="border-line"></div>
+                }
+                i++;
+            }
+        }
+        <nav aria-label="Suppliers navigation" class="pages">
+            <vc:pager paging-list="@Model" />
+        </nav>
+    </div>
+
+    <script src="~/js/hideBaner.js"></script>
+
+

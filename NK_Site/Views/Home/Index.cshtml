@@ -1,0 +1,67 @@
+﻿@using System.Globalization;
+@model ReflectionIT.Mvc.Paging.PagingList<Article>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+<section class="containerOuter introHomepage" id="intro">
+    <section class="containerInner ">
+        <h2 class="hIntro">Hi, I'm Nikita</h2>
+    </section>
+</section>
+<section class="containerOuter line-tan" id="bannerText">
+    <section class="containerInner">
+
+        <p>
+            I'm a programmer and a little artist.
+            This site is my field for experimentations in programming and digital art.
+            I keep a lot of useful articles here which help me.
+            If you find something interesting here I'll be glad.
+        </p>
+        <p>
+            P/s: the main part of articles will be available after registration on my site.
+        </p>
+    </section>
+</section>
+
+
+<section class="containerOuter" id="mainContent">
+    <section class="containerInner">
+        <div class="col-left">
+
+            <a href="/Articles"><h3 class="h-blog line-chocolate">BLOG</h3></a>
+            <div class="col-fixedHeight">
+                <ul class="itemFeed">
+                    @{
+                        foreach (var article in Model)
+                        {
+                            <li>
+                                <a href="/Articles/Details/@article.Id">
+                                    #@article.Id: @article.Name
+                                </a>
+                                <span>
+                                    <time class="block-time">@article.DateCreate.ToString("MMMM dd, yyyy", CultureInfo.GetCultureInfo("en-us"))</time>
+                                </span>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-right">
+            <a href="/Art"><h3 class="h-speaking">ART</h3></a>
+            <div class="col-fixedHeight">
+                <ul class="itemFeed">
+
+                    <li><a href="#">University of California San Diego</a><br><span>San Diego, Oct 31, 2019</span></li>
+                    <li><a href="#">San Diego Mesa College</a><br><span>San Diego, Nov 1, 2019</span></li>
+                    <li><a href="#">Ignite</a><br><span>Orlando, Nov 4, 2019</span></li>
+                    <li><a href="#">Azure DevFest</a><br><span>Portland, Nov 12, 2019</span></li>
+                    <li><a href="#">DevIntersection</a><br><span>Las Vegas, Nov 19, 2019</span></li>
+
+                </ul>
+            </div>
+        </div>
+    </section>
+</section>
+

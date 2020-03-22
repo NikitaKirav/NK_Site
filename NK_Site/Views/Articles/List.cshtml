@@ -1,0 +1,83 @@
+﻿@model ReflectionIT.Mvc.Paging.PagingList<Article>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+
+@{
+    Layout = "_AdminBoardLayout";
+}
+
+<div class="row">
+    <div class="col-lg-12" id="listingArea">
+        <div class="pull-left">
+            <h2>Notes</h2>
+        </div>
+        <br />
+        <div class="pull-right">
+            <button class="btn btn-success" id="createButton">Create new article</button>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">ShortDescription</th>
+                    <th scope="col">IsFavorite</th>
+                    <th scope="col">Visible</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model)
+                {
+                    <tr>
+                        <th>
+                            <input type="hidden" value="@article.Id" />
+                            @article.Name
+                        </th>
+                        <th>@article.ShortDescription</th>
+                        <th class="checkboxTable">@Html.CheckBox("IsFavorite", @article.IsFavorite, new { @disabled = "disabled" })  </th>
+                        <th class="checkboxTable">@Html.CheckBox("Visible", @article.Visible, new { @disabled = "disabled" }) </th>
+                        <th>
+                            <button class="editButton btn btn-primary" data-id="@article.Id">Edit</button>
+                            <button class="deleteButton btn btn-danger" data-id="@article.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                        </th>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="contentArea">
+
+                </div>
+            </div>
+        </div>
+
+        <nav aria-label="Suppliers navigation">
+            <vc:pager paging-list="@Model" />
+        </nav>
+
+        <script>$("#createButton").click(function () {
+                location.href = "/Articles/Create";
+            });
+
+            $(".editButton").click(function () {
+                location.href = "/Articles/Edit/" + $(this).attr("data-id");
+            });
+
+            $(".deleteButton").click(function () {
+                $.ajax({
+                    url: "/Articles/Delete/",
+                    method: "get",
+                    data: {
+                        Id: $(this).attr("data-id")
+                    }
+                }).done(function (response) {
+                    $("#contentArea").html(response);
+                });
+            });</script>
+    </div>
+</div>

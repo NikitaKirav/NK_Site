@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "_AdminBoardLayout";
+}
+
+<h2>List's Constants</h2>
+<table class="table">
+    <tr><th>Name</th><th>Value</th><th></th></tr>
+    <tr>
+        <td>
+            <input name="NameNew" id="NameNew" class="form-control" value=""/>
+        </td>
+        <td>
+            <input name="ValueNew" id="ValueNew" class="form-control" value=""/>
+        </td>
+        <td>
+            <button class="addButton btn btn-success">Add New</button>
+        </td>
+    </tr>
+    @foreach (var row in Model)
+    {
+        <tr>
+            <td>
+                <input name="Name" id="@("Name"+@row.Id)" class="form-control" value="@row.Name" />
+            </td>
+            <td>
+                <input name="Value" id="@("Value"+@row.Id)" class="form-control" value="@row.Value" />
+            </td>
+            <td>
+                <button class="saveButton btn btn-primary" data-id="@row.Id">Save</button>
+            </td>
+        </tr>
+    }
+</table>
+<script src="~/js/Constants.js"></script>

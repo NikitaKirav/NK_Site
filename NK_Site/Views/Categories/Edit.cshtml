@@ -1,0 +1,87 @@
+﻿@{
+    Layout = "_AdminBoardLayout";
+}
+
+<div>
+    <h2>Edit Category</h2>
+
+    <form id="editForm" method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="form-group">
+            <label>
+                Name
+            </label>
+            <input name="Name" class="form-control" value="@Model.Name" />
+        </div>
+
+        <div class="form-group">
+            <label>
+                OrderItem
+            </label>
+            <input name="OrderItem" class="form-control" value="@Model.OrderItem"  />
+        </div>
+
+        @*<div class="form-group">
+            <label>
+                NestingLevel
+            </label>
+            <input name="NestingLevel" class="form-control" />
+        </div>*@
+        <div class="form-group">
+            <label>
+                NestingLevel
+            </label>
+            @Html.DropDownList("NestingLevelId", new SelectList(ViewBag.ListOfCategory, "Id", "Name"), "-root-", new { })
+        </div>
+        <div class="form-group">
+            <label>
+                ImagePath
+            </label>
+            <input name="ImagePath" class="form-control" value="@Model.ImagePath"  />
+        </div>
+
+        <div class="form-group">
+            <label>
+                ImageText
+            </label>
+            <input name="ImageText" class="form-control"  value="@Model.ImageText"  />
+        </div>
+
+        <div class="form-group">
+            <label>
+                Description
+            </label>
+            <input name="Description" class="form-control" value="@Model.Description"   />
+        </div>
+
+        @*<div class="form-group">
+            <label>
+                Visible
+            </label>
+            <input name="Visible" class="form-control" />
+        </div>*@
+        <div class="form-check">
+            @Html.CheckBox("Visible", @Model.Visible, new { })
+            <label class="form-check-label" for="defaultCheck1">
+                Visible
+            </label>
+        </div>
+
+
+        <button class="btn btn-success" type="button" id="saveButton">
+            Save
+        </button>
+    </form>
+</div>
+
+<script>
+    $("#saveButton").click(function () {
+        $.ajax({
+            url: "/Categories/Edit/",
+            method: "post",
+            data: $("#editForm").serialize()
+        }).done(function () {
+            location.href = "/Categories/List";
+        });
+    });
+</script>

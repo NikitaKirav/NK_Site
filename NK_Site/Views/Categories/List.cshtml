@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "_AdminBoardLayout";
+}
+
+<div class="row">
+    <div class="col-lg-12" id="listingArea">
+        <div class="pull-left">
+            <h2>Categories</h2>
+        </div>
+        <br />
+        <div class="pull-right">
+            <button class="btn btn-success" id="createButton">Create new category</button>
+        </div>
+        <table class="table table-hover category">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var categoryLevel1 in Model)
+                {
+
+                    @if (categoryLevel1.NestingLevelId == null)
+                    {
+                        <tr>
+                            <th>
+                                <input type="hidden" value="@categoryLevel1.Id" />
+                                <a class="nav-link"> @categoryLevel1.Name</a>
+                            </th>
+                            <th>
+                                <button class="editButton btn btn-primary" data-id="@categoryLevel1.Id">Edit</button>
+                                <button class="deleteButton btn btn-danger" data-id="@categoryLevel1.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                            </th>
+                        </tr>
+                        @foreach (var categoryLevel2 in Model)
+                        {
+                            @if (categoryLevel2.NestingLevelId == categoryLevel1.Id)
+                            {
+                                <tr>
+                                    <th>
+                                        <input type="hidden" value="@categoryLevel2.Id" />
+                                        <nav class="nav nav-pills flex-column">
+                                            <a class="nav-link ml-3 my-1">@categoryLevel2.Name</a>
+                                        </nav>
+                                    </th>
+                                    <th>
+                                        <button class="editButton btn btn-primary" data-id="@categoryLevel2.Id">Edit</button>
+                                        <button class="deleteButton btn btn-danger" data-id="@categoryLevel2.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                                    </th>
+                                </tr>
+                                @foreach (var categoryLevel3 in Model)
+                                {
+                                    @if (categoryLevel3.NestingLevelId == categoryLevel2.Id)
+                                    {
+                                        <tr>
+                                            <th>
+                                                <input type="hidden" value="@categoryLevel3.Id" />
+                                                <nav class="nav nav-pills flex-column">
+                                                    <a class="nav-link ml-6 my-1">@categoryLevel3.Name</a>
+                                                </nav>
+                                            </th>
+                                            <th>
+                                                <button class="editButton btn btn-primary" data-id="@categoryLevel3.Id">Edit</button>
+                                                <button class="deleteButton btn btn-danger" data-id="@categoryLevel3.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                                            </th>
+                                        </tr>
+                                        @foreach (var categoryLevel4 in Model)
+                                        {
+                                            @if (categoryLevel4.NestingLevelId == categoryLevel3.Id)
+                                            {
+                                                <tr>
+                                                    <th>
+                                                        <input type="hidden" value="@categoryLevel4.Id" />
+                                                        <nav class="nav nav-pills flex-column">
+                                                            <a class="nav-link ml-9 my-1">@categoryLevel4.Name</a>
+                                                        </nav>
+                                                    </th>
+                                                    <th>
+                                                        <button class="editButton btn btn-primary" data-id="@categoryLevel4.Id">Edit</button>
+                                                        <button class="deleteButton btn btn-danger" data-id="@categoryLevel4.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                                                    </th>
+                                                </tr>
+                                                @foreach (var categoryLevel5 in Model)
+                                                {
+                                                    @if (categoryLevel5.NestingLevelId == categoryLevel4.Id)
+                                                    {
+                                                        <tr>
+                                                            <th>
+                                                                <input type="hidden" value="@categoryLevel5.Id" />
+                                                                <nav class="nav nav-pills flex-column">
+                                                                    <a class="nav-link ml-12 my-1">@categoryLevel5.Name</a>
+                                                                </nav>
+                                                            </th>
+                                                            <th>
+                                                                <button class="editButton btn btn-primary" data-id="@categoryLevel5.Id">Edit</button>
+                                                                <button class="deleteButton btn btn-danger" data-id="@categoryLevel5.Id" data-toggle="modal" data-target="#formModal">Delete</button>
+                                                            </th>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            </tbody>
+        </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="contentArea">
+
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            $("#createButton").click(function () {
+                location.href = "/Categories/Create";
+            });
+
+            $(".editButton").click(function () {
+                location.href = "/Categories/Edit/" + $(this).attr("data-id");
+            });
+
+            $(".deleteButton").click(function () {
+                $.ajax({
+                    url: "/Categories/Delete/",
+                    method: "get",
+                    data: {
+                        Id: $(this).attr("data-id")
+                    }
+                }).done(function (response) {
+                    $("#contentArea").html(response);
+                });
+            });
+        </script>
+    </div>
+</div>
