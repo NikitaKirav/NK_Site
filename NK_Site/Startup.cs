@@ -11,6 +11,7 @@ using NK_Site.Data.Repository;
 using NK_Site.Interfaces;
 using NK_Site.Models;
 using ReflectionIT.Mvc.Paging;
+using System;
 
 namespace NK_Site
 {
@@ -32,6 +33,23 @@ namespace NK_Site
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            // For HTTPS
+            //services.AddHsts(options =>
+            //{
+            //    options.Preload = true;
+            //    options.IncludeSubDomains = true;
+            //    options.MaxAge = TimeSpan.FromDays(60);
+            //    options.ExcludedHosts.Add("us.example.com");
+            //    options.ExcludedHosts.Add("www.example.com");
+            //});
+
+            // For HTTPS
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            //    options.HttpsPort = 44344;
+            //});
 
             services.Configure<IISServerOptions>(options =>
             {
@@ -73,12 +91,17 @@ namespace NK_Site
             {
                 app.UseDeveloperExceptionPage();
             }
+            else // For HTTPS
+            {
+                app.UseHsts();
+            }
 
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCors();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHttpsRedirection();  // For HTTPS
 
             app.UseEndpoints(endpoints =>
             {
